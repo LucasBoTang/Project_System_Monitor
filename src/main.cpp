@@ -5,7 +5,7 @@
 #include "linux_parser.h"
 
 int main() {
-  std::cout << LinuxParser::MemoryUtilization() << "\n";
+  //std::cout << LinuxParser::UpTime() << "\n";
   System system;
-  // NCursesDisplay::Display(system);
+ // NCursesDisplay::Display(system);
 }

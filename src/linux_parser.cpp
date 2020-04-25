@@ -10,6 +10,29 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+// Read and return the Operating System
+string LinuxParser::OperatingSystem() {
+  string line;
+  string key;
+  string value;
+  std::ifstream filestream(kOSPath);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ' ', '_');
+      std::replace(line.begin(), line.end(), '=', ' ');
+      std::replace(line.begin(), line.end(), '"', ' ');
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == "PRETTY_NAME") {
+          std::replace(value.begin(), value.end(), '_', ' ');
+          return value;
+        }
+      }
+    }
+  }
+  return value;
+}
+
 // Read and return the Kernel
 string LinuxParser::Kernel() {
   string os, str, kernel;
@@ -42,30 +65,7 @@ float LinuxParser::MemoryUtilization() {
   return (total - free) / total;
 };
 
-// Read and return the Operating System
-string LinuxParser::OperatingSystem() {
-  string line;
-  string key;
-  string value;
-  std::ifstream filestream(kOSPath);
-  if (filestream.is_open()) {
-    while (std::getline(filestream, line)) {
-      std::replace(line.begin(), line.end(), ' ', '_');
-      std::replace(line.begin(), line.end(), '=', ' ');
-      std::replace(line.begin(), line.end(), '"', ' ');
-      std::istringstream linestream(line);
-      while (linestream >> key >> value) {
-        if (key == "PRETTY_NAME") {
-          std::replace(value.begin(), value.end(), '_', ' ');
-          return value;
-        }
-      }
-    }
-  }
-  return value;
-}
-
-// TODO: Read and return the total number of processes
+// Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
   int processes;
   string line;
@@ -82,7 +82,7 @@ int LinuxParser::TotalProcesses() {
   return processes;
 }
 
-// TODO: Read and return the number of running processes
+// Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   int procs_running;
   string line;
