@@ -10,6 +10,38 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+// Read and return the Kernel
+string LinuxParser::Kernel() {
+  string os, str, kernel;
+  string line;
+  std::ifstream filestream(kProcDirectory + kVersionFilename);
+  if (filestream.is_open()) {
+    std::getline(filestream, line);
+    std::istringstream linestream(line);
+    linestream >> os >> str >> kernel;
+  }
+  return kernel;
+}
+
+// Read and return the system memory utilization
+float LinuxParser::MemoryUtilization() {
+  float total;
+  float free;
+  string line;
+  string key;
+  float value;
+  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+      if (key == "MemTotal:") { total = value; }
+      if (key == "MemFree:") { free = value; }
+    }
+  }
+  return (total - free) / total;
+};
+
 // Read and return the Operating System
 string LinuxParser::OperatingSystem() {
   string line;
@@ -33,17 +65,51 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-// Read and return the Kernel
-string LinuxParser::Kernel() {
-  string os, str, kernel;
+// TODO: Read and return the total number of processes
+int LinuxParser::TotalProcesses() {
+  int processes;
   string line;
-  std::ifstream stream(kProcDirectory + kVersionFilename);
-  if (stream.is_open()) {
-    std::getline(stream, line);
-    std::istringstream linestream(line);
-    linestream >> os >> str >> kernel;
+  string key;
+  int value;
+  std::ifstream filestream(kProcDirectory + kStatFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+      if (key == "processes") { processes = value; }
+    }
   }
-  return kernel;
+  return processes;
+}
+
+// TODO: Read and return the number of running processes
+int LinuxParser::RunningProcesses() {
+  int procs_running;
+  string line;
+  string key;
+  int value;
+  std::ifstream filestream(kProcDirectory + kStatFilename);
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+      if (key == "procs_running") { procs_running = value; }
+    }
+  }
+  return procs_running;
+}
+
+// Read and return the system uptime
+long LinuxParser::UpTime() {
+  long uptime;
+  string line;
+  std::ifstream filestream(kProcDirectory + kUptimeFilename);
+  if (filestream.is_open()) {
+    std::getline(filestream, line);
+    std::istringstream linestream(line);
+    linestream >> uptime;
+  }
+  return uptime;
 }
 
 // Read and return the pids
@@ -66,28 +132,6 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() {
-  float total;
-  float free;
-  string line;
-  string key;
-  float value;
-  std::ifstream filestream(kProcDirectory + kMeminfoFilename);
-  if (filestream.is_open()) {
-    while (std::getline(filestream, line)) {
-      std::istringstream linestream(line);
-      linestream >> key >> value;
-      if (key == "MemTotal:") { total = value; }
-      if (key == "MemFree:") { free = value; }
-    }
-  }
-  return (total - free) / total;
-};
-
-// TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
-
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
 
@@ -103,12 +147,6 @@ long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { return {}; }
-
-// TODO: Read and return the total number of processes
-int LinuxParser::TotalProcesses() { return 0; }
-
-// TODO: Read and return the number of running processes
-int LinuxParser::RunningProcesses() { return 0; }
 
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
