@@ -32,23 +32,29 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   int row{0};
   mvwprintw(window, ++row, 2, ("OS: " + system.OperatingSystem()).c_str());
   mvwprintw(window, ++row, 2, ("Kernel: " + system.Kernel()).c_str());
+  auto cpu_utils = system.Cpu().Utilization();
   mvwprintw(window, ++row, 2, "CPU: ");
   wattron(window, COLOR_PAIR(1));
   mvwprintw(window, row, 10, "");
-  wprintw(window, ProgressBar(system.Cpu().Utilization()[0]).c_str());
+  wprintw(window, ProgressBar(cpu_utils[0]).c_str());
   wattroff(window, COLOR_PAIR(1));
+  for (int i = 0; i + 1 < cpu_utils.size(); i++) {
+    char cpu[] = "CPU  : ";
+    cpu[4] = '0' + i;
+    mvwprintw(window, ++row, 2, cpu);
+    wattron(window, COLOR_PAIR(1));
+    mvwprintw(window, row, 10, "");
+    wprintw(window, ProgressBar(cpu_utils[i + 1]).c_str());
+    wattroff(window, COLOR_PAIR(1));
+  }
   mvwprintw(window, ++row, 2, "Memory: ");
   wattron(window, COLOR_PAIR(1));
   mvwprintw(window, row, 10, "");
   wprintw(window, ProgressBar(system.MemoryUtilization()).c_str());
   wattroff(window, COLOR_PAIR(1));
-  mvwprintw(window, ++row, 2,
-            ("Total Processes: " + to_string(system.TotalProcesses())).c_str());
-  mvwprintw(
-      window, ++row, 2,
-      ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
-  mvwprintw(window, ++row, 2,
-            ("Up Time: " + Format::ElapsedTime(system.UpTime())).c_str());
+  mvwprintw(window, ++row, 2, ("Total Processes: " + to_string(system.TotalProcesses())).c_str());
+  mvwprintw(window, ++row, 2, ("Running Processes: " + to_string(system.RunningProcesses())).c_str());
+  mvwprintw(window, ++row, 2, ("Up Time: " + Format::ElapsedTime(system.UpTime())).c_str());
   wrefresh(window);
 }
 
@@ -89,7 +95,7 @@ void NCursesDisplay::Display(System& system, int n) {
   start_color();  // enable color
 
   int x_max{getmaxx(stdscr)};
-  WINDOW* system_window = newwin(9, x_max - 1, 0, 0);
+  WINDOW* system_window = newwin(13, x_max - 1, 0, 0);
   WINDOW* process_window =
       newwin(3 + n, x_max - 1, system_window->_maxy + 1, 0);
 

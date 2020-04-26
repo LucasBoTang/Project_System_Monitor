@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "linux_parser.h"
-#include "processor.h"
 
 int main() {
   System system;
