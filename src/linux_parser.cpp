@@ -148,7 +148,7 @@ vector<vector<string>> LinuxParser::CpuUtilization() {
 vector<long> LinuxParser::Jiffies() {
   auto utils = LinuxParser::CpuUtilization();
   vector<long> total(utils.size());
-  for (int i = 0; i < utils.size(); i++) {
+  for (unsigned int i = 0; i < utils.size(); i++) {
     for (string value : utils[i]) {
       total[i] += stol(value);
     }
@@ -160,7 +160,7 @@ vector<long> LinuxParser::Jiffies() {
 vector<long> LinuxParser::IdleJiffies() {
   auto utils = LinuxParser::CpuUtilization();
   vector<long> idle(utils.size());
-  for (int i = 0; i < utils.size(); i++) {
+  for (unsigned int i = 0; i < utils.size(); i++) {
     // idle + iowait
     idle[i] = stol(utils[i][3]) + stol(utils[i][4]);
   }
@@ -233,7 +233,7 @@ string LinuxParser::User(int pid) {
 
 // Read and return the number of active jiffies for a PID
 long LinuxParser::ActiveJiffies(int pid) {
-  long utime, stime, cutime, cstime, starttime;
+  long utime, stime, cutime, cstime;
   string line;
   string str;
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
@@ -272,7 +272,7 @@ string LinuxParser::Ram(int pid) {
 }
 
 // Read and return the uptime of a process
-long LinuxParser::UpTime(int pid[[maybe_unused]]) {
+long LinuxParser::UpTime(int pid) {
   long starttime;
   string line;
   string str;

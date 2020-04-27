@@ -38,7 +38,7 @@ void NCursesDisplay::DisplaySystem(System& system, WINDOW* window) {
   mvwprintw(window, row, 10, "");
   wprintw(window, ProgressBar(cpu_utils[0]).c_str());
   wattroff(window, COLOR_PAIR(1));
-  for (int i = 0; i + 1 < cpu_utils.size(); i++) {
+  for (unsigned int i = 0; i + 1 < cpu_utils.size(); i++) {
     char cpu[] = "CPU  : ";
     cpu[4] = '0' + i;
     mvwprintw(window, ++row, 2, cpu);
