@@ -18,7 +18,14 @@ using std::vector;
 Processor& System::Cpu() { return cpu_; }
 
 // Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes() {
+  vector<int> pids = LinuxParser::Pids();
+  processes_ = {};
+  for (int pid : pids) {
+    processes_.push_back(Process(pid));
+  }
+  return processes_;
+}
 
 // Return the operating system name
 std::string System::OperatingSystem() { return LinuxParser::OperatingSystem(); }

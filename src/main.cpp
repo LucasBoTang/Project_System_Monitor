@@ -7,12 +7,6 @@
 #include "linux_parser.h"
 
 int main() {
-  std::vector<int> pids = LinuxParser::Pids();
-  for (int pid : pids) {
-    std::cout << "Pid: " << pid << "\n";
-    std::string cpu = LinuxParser::Command(pid);
-    std::cout << cpu << "\n";
-  }  
   System system;
-  //NCursesDisplay::Display(system);
+  NCursesDisplay::Display(system);
 }
