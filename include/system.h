@@ -11,7 +11,7 @@
 class System {
  public:
   Processor& Cpu();
-  std::vector<Process>& Processes();  // TODO: See src/system.cpp
+  std::vector<Process>& Processes();
   std::string OperatingSystem();
   std::string Kernel();
   float MemoryUtilization();
