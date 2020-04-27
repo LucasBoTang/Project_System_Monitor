@@ -19,13 +19,13 @@ Process::Process(int pid) : pid_(pid) {
 }
 
 // Return this process's ID
-int Process::Pid() { return pid_; }
+int Process::Pid() const { return pid_; }
 
 // Return the user (name) that generated this process
 string Process::User() { return LinuxParser::User(pid_); }
 
 // Return this process's CPU utilization
-float Process::CpuUtilization() { return cpu_; }
+float Process::CpuUtilization() const { return cpu_; }
 
 // Return this process's memory utilization
 string Process::Ram() { return LinuxParser::Ram(pid_); }
@@ -36,7 +36,8 @@ long int Process::UpTime() { return LinuxParser::UpTime(pid_); }
 // Return the command that generated this process
 string Process::Command() { return LinuxParser::Command(pid_); }
 
+
 // Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& other) const {
-  return true;
+  return CpuUtilization() < other.CpuUtilization();
 }

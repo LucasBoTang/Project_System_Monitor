@@ -5,9 +5,6 @@
 
 #include "linux_parser.h"
 
-#include <iostream>
-using std::cout;
-
 using std::stof;
 using std::stol;
 using std::string;
