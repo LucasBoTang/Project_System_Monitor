@@ -22,19 +22,19 @@ Process::Process(int pid) : pid_(pid) {
 int Process::Pid() const { return pid_; }
 
 // Return the user (name) that generated this process
-string Process::User() { return LinuxParser::User(pid_); }
+string Process::User() const { return LinuxParser::User(pid_); }
 
 // Return this process's CPU utilization
 float Process::CpuUtilization() const { return cpu_; }
 
 // Return this process's memory utilization
-string Process::Ram() { return LinuxParser::Ram(pid_); }
+string Process::Ram() const { return LinuxParser::Ram(pid_); }
 
 // Return the age of this process (in seconds)
-long int Process::UpTime() { return LinuxParser::UpTime(pid_); }
+long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
 
 // Return the command that generated this process
-string Process::Command() { return LinuxParser::Command(pid_); }
+string Process::Command() const { return LinuxParser::Command(pid_); }
 
 
 // Overload the "less than" comparison operator for Process objects

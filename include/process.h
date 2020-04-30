@@ -7,11 +7,11 @@ class Process {
   public:
     Process(int pid);
     int Pid() const;
-    std::string User();
-    std::string Command();
+    std::string User() const;
+    std::string Command() const;
     float CpuUtilization() const;
-    std::string Ram(); 
-    long UpTime(); 
+    std::string Ram() const; 
+    long UpTime() const; 
     bool operator<(Process const& a) const; 
 
   private:
